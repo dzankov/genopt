@@ -7,6 +7,7 @@ from .crossovers import one_point_crossover
 from .mutators import uniform_mutation
 from random import randint
 
+
 class SGA:
     
     def __init__(self, task='minimize', pop_size=10, cross_prob=0.8, mut_prob=0.1, elitism=True):
@@ -17,8 +18,7 @@ class SGA:
         self.pop_size = pop_size
         self.cross_prob = cross_prob
         self.mut_prob = mut_prob
-        
-        
+
         self.selector = roulette_wheel_selection
         self.scaler = sigma_trunc_scaling
         self.crossover = one_point_crossover
@@ -26,27 +26,21 @@ class SGA:
         
         self.elitism = elitism
         self.current_generation = 0
-     
-        
+
     def set_fitness(self, fitness_func):
         self.fitness_func = fitness_func
-        
-    
+
     def set_scaler_type(self, scaler_type):
         self.scaler = scaler_type
 
-    
     def set_selector_type(self, selector_type):
         self.selector = selector_type
-    
-    
+
     def set_crossover_type(self, crossover_type):
         self.crossover = crossover_type
     
-    
     def set_mutator_type(self, mutator_type):
         self.mutator = mutator_type
-        
      
     def initialize(self, space):
         self.space = space
@@ -57,13 +51,11 @@ class SGA:
         self.population.scale()
         self.population.sort()
         self.population.calc_statistics()
-        
     
     def evaluate(self):
         self.population.evaluate()
         return self
-    
-    
+
     def select(self):
         selected_inds = self.selector(self.population)
         return selected_inds
@@ -80,13 +72,11 @@ class SGA:
         else:
             sister, brother = deepcopy(mother), deepcopy(father)
         return sister, brother
-    
-    
+
     def mutate(self, individual, space, prob):
         mutant = self.mutator(individual, space, prob=prob)
         return mutant
-    
-    
+
     def step(self):
         mating_pool = self.get_mating_pool(self.select())
 
@@ -111,7 +101,6 @@ class SGA:
                 new_pop.append(brother_mut)
                 self.population.append(brother_mut)
 
-                
         while len(new_pop) < self.pop_size:
             ind = init_random_individual(self.space)
             if ind not in self.population:
@@ -120,7 +109,6 @@ class SGA:
                 
         if len(mating_pool):
             new_pop.append(mating_pool.pop())
-            
         
         new_pop.evaluate()
         new_pop.scale()

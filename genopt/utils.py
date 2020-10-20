@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 def init_random_individual(space):
     ind = []
     for i in range(5):
-        ind.append(random.uniform(space[0], space[1]))
+        ind.append(random.choice(space))
     return Individual(ind)
 
 
@@ -21,6 +21,26 @@ def init_population(minimax, space, pop_size):
         if individual not in population:
             population.append(individual)
     return population
+
+
+def weighted_sample_without_replacement(population, weights, k=1):
+    weights = list(weights)
+    positions = range(len(population))
+    indices = []
+    n = 0
+    while True:
+        n += 1
+        if n > 100:
+            return [population[0], population[1], population[2]]
+        needed = k - len(indices)
+        if not needed:
+            break
+        for i in random.choices(positions, weights, k=needed):
+            if weights[i]:
+                weights[i] = 0.0
+                indices.append(i)
+    return [population[i] for i in indices]
+
 
 def flip_coin(p):
 

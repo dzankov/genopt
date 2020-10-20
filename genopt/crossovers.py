@@ -45,9 +45,11 @@ def uniform_crossover(mother, father, indpb=0.1):
 
     return sister, brother
 
+
 def gen_calc(x, y, alpha):
     gen = alpha * x + (1 - alpha) * y
     return gen
+
 
 def whole_arithmetic_crossover(mother, father):
     sister = deepcopy(mother)
