@@ -44,14 +44,15 @@ class SGA:
      
     def initialize(self, space, steps):
         self.space = space
-        self.population = init_population(self.task, self.space, self.pop_size)
+        self.steps = steps
+        self.population = init_population(self.task, self.space, self.pop_size, self.steps)
         self.population.evaluator = self.fitness_func
         self.population.scaler = self.scaler
         self.evaluate()
         self.population.scale()
         self.population.sort()
         self.population.calc_statistics()
-        self.steps = steps
+
     
     def evaluate(self):
         self.population.evaluate()

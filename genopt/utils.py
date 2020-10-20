@@ -13,11 +13,11 @@ def init_random_individual(space, steps):
     return Individual(ind)
 
 
-def init_population(minimax, space, pop_size):
+def init_population(minimax, space, pop_size, steps):
     population = Population(minimax=minimax)
 
     while len(population) < pop_size:
-        individual = init_random_individual(space)
+        individual = init_random_individual(space, steps)
         if individual not in population:
             population.append(individual)
     return population
