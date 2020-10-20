@@ -6,9 +6,9 @@ from genopt.population import Individual, Population
 import matplotlib.pyplot as plt
 
 
-def init_random_individual(space):
+def init_random_individual(space, steps):
     ind = []
-    for i in range(5):
+    for i in range(steps):
         ind.append(random.choice(space))
     return Individual(ind)
 

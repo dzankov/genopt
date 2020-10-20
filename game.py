@@ -22,43 +22,49 @@ from RNNSynthesis.environment import SimpleSynthesis
 
 
 target = next(SDFRead(target))
-
+logger.info(f" Program started. Target: {str(target)}, Steps: {steps}, "
+            f"Population size: {popsize}, Number of steps: {steps}")
 
 play = SimpleSynthesis(target, steps=10 ** 6)
 
-ga = SGA(task='maximize', pop_size=5, cross_prob=0.8, mut_prob=0.1, elitism=True)
+ga = SGA(task='maximize', pop_size=popsize, cross_prob=0.9, mut_prob=0.1, elitism=True)
 ga.set_selector_type(tournament_selection)
 ga.set_scaler_type(sigma_trunc_scaling)
 ga.set_crossover_type(two_point_crossover)
 ga.set_mutator_type(uniform_mutation)
 
 
-def f(chromo):
-    r = None
+def fitness(chromo):
+    reward = 0
     play.reset()
     for step in chromo:
-        s, r, d, info = play.step(int(step))
-        if len(s) - len(target) >= 20:
+        state, reward, done, info = play.step(int(step))
+        if len(state) - len(target) >= 20:
             play.reset()
         # print('state', s, 'reward', r, 'info', info)
-    return r
+    return reward
 
 
-ga.set_fitness(f)
+ga.set_fitness(fitness)
 
 
 # init action space and population
-ga.initialize(play.action_space)
+ga.initialize(play.action_space, steps)
 
-tan = 0
+tanimoto = 0
 for i in range(steps):
     ga.step()
     chromo = ga.best_individual()
     stat = ga.population.calc_statistics()
     stat.stats['chromo'] = chromo
-    tan = chromo.score
+    tanimoto = chromo.score
     for k in stat.stats:
-        print(k, stat.stats[k])
-    if tan >= 10:
-        print('DONE')
+        logger.info(f'{k}:, {stat.stats[k]}')
+    if tanimoto >= 10:
+        logger.info('DONE')
+        for r in play.render():
+            logger.info(r)
         break
+
+for r in play.render():
+    logger.info(r)

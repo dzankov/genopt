@@ -42,7 +42,7 @@ class SGA:
     def set_mutator_type(self, mutator_type):
         self.mutator = mutator_type
      
-    def initialize(self, space):
+    def initialize(self, space, steps):
         self.space = space
         self.population = init_population(self.task, self.space, self.pop_size)
         self.population.evaluator = self.fitness_func
@@ -51,6 +51,7 @@ class SGA:
         self.population.scale()
         self.population.sort()
         self.population.calc_statistics()
+        self.steps = steps
     
     def evaluate(self):
         self.population.evaluate()
@@ -66,7 +67,7 @@ class SGA:
             mating_pool.append(self.population[i])
         return mating_pool
     
-    def crossover(self, mother, father, space):
+    def crossover(self, mother, father):
         if flip_coin(self.cross_prob):
             sister, brother = self.crossover(mother, father)
         else:
@@ -102,7 +103,7 @@ class SGA:
                 self.population.append(brother_mut)
 
         while len(new_pop) < self.pop_size:
-            ind = init_random_individual(self.space)
+            ind = init_random_individual(self.space, self.steps)
             if ind not in self.population:
                 new_pop.append(ind)
                 self.population.append(ind)
