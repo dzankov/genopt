@@ -39,8 +39,9 @@ def fitness(chromo):
     play.reset()
     for step in chromo:
         state, reward, done, info = play.step(int(step))
-        if len(state) - len(target) >= 20:
-            play.reset()
+        if state:
+            if len(state) - len(target) >= 20:
+                play.reset()
         # print('state', s, 'reward', r, 'info', info)
     return reward
 
