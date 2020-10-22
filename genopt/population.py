@@ -1,3 +1,4 @@
+from multiprocessing import Pool
 from statistics import pvariance, pstdev
 
 
@@ -81,9 +82,11 @@ class Population:
     def clear(self):
         self.container.clear()
 
-    def evaluate(self):
-        for ind in self:
-            ind.score = self.evaluator(ind)
+    def evaluate(self, n_cpu=1):
+        pool = Pool(n_cpu)
+        scores = pool.map(self.evaluator, self)
+        for ind, score in zip(self, scores):
+            ind.score = score
         return self
 
     def scale(self):

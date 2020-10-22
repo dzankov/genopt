@@ -10,7 +10,7 @@ from random import randint
 
 class SGA:
     
-    def __init__(self, task='minimize', pop_size=10, cross_prob=0.8, mut_prob=0.1, elitism=True):
+    def __init__(self, task='minimize', pop_size=10, cross_prob=0.8, mut_prob=0.1, elitism=True, n_cpu=1):
         
         self.task = task
         self.fitness_func = None
@@ -25,6 +25,7 @@ class SGA:
         self.mutator = uniform_mutation
         
         self.elitism = elitism
+        self.n_cpu = n_cpu
         self.current_generation = 0
 
     def set_fitness(self, fitness_func):
@@ -55,7 +56,7 @@ class SGA:
 
     
     def evaluate(self):
-        self.population.evaluate()
+        self.population.evaluate(n_cpu=self.n_cpu)
         return self
 
     def select(self):
