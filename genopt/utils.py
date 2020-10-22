@@ -2,7 +2,7 @@ import os
 import csv
 import random
 from datetime import datetime
-from genopt.population import Individual, Population
+from .population import Individual, Population
 import matplotlib.pyplot as plt
 
 
