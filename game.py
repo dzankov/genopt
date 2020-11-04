@@ -45,6 +45,7 @@ def fitness(chromo):
                     logger.info('DONE. Target synthesized!')
                 else:
                     logger.info('DONE')
+                logger.info(f'current state: {state}, reward {reward}, info {info}\n')
                 break
 
     print(str(time() - start))
