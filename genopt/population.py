@@ -87,6 +87,7 @@ class Population:
         scores = pool.map(self.evaluator, self)
         for ind, score in zip(self, scores):
             ind.score = score
+        pool.close()
         return self
 
     def scale(self):
