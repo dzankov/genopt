@@ -53,6 +53,7 @@ class SGA:
         self.population.scale()
         self.population.sort()
         self.population.calc_statistics()
+        self.best_solution = self.best_individual()
 
     
     def evaluate(self):
@@ -119,11 +120,15 @@ class SGA:
         
         if self.elitism:
             if self.task == 'maximize':
-                if self.population.best_raw().score > new_pop.best_raw().score:
-                    new_pop[-1] = self.population.best_raw()
+                if self.best_solution.score > new_pop.best_raw().score:
+                    new_pop[-1] = self.best_solution
+                else:
+                    self.best_solution = new_pop.best_raw()
             else:
-                if self.population.best_raw().score < new_pop.best_raw().score:
-                    new_pop[-1] = self.population.best_raw()
+                if self.best_solution.score < new_pop.best_raw().score:
+                    new_pop[-1] = self.best_solution
+                else:
+                    self.best_solution = new_pop.best_raw()
                     
         self.population = new_pop
         self.current_generation += 1
