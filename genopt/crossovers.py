@@ -1,5 +1,6 @@
 import random
 from copy import deepcopy
+from .utils import flip_coin
 
 
 def one_point_crossover(mother, father):
@@ -33,30 +34,17 @@ def two_point_crossover(mother, father):
     return sister, brother
 
 
-def uniform_crossover(mother, father, indpb=0.1):
+def uniform_point_crossover(mother, father):
     sister = deepcopy(mother)
     brother = deepcopy(father)
 
-    for i in range(len(sister)):
-        if random.random() < indpb:
-            slot = sister[i]
-            sister[i] = brother[i]
-            brother[i] = slot
+    for i, (gs, gb) in enumerate(zip(sister, brother)):
+        if flip_coin(0.5):
+            sister[i] = gb
+            brother[i] = gs
+        elif flip_coin(0.25):
+            sister[random.randint(0, len(sister) - 1)] = gb
+            brother[random.randint(0, len(sister) - 1)] = gs
 
-    return sister, brother
-
-
-def gen_calc(x, y, alpha):
-    gen = alpha * x + (1 - alpha) * y
-    return gen
-
-
-def whole_arithmetic_crossover(mother, father):
-    sister = deepcopy(mother)
-    brother = deepcopy(father)
-    alpha = random.random()
-    for i in range(len(mother)):
-        sister[i] = gen_calc(mother[i], father[i], alpha)
-        brother[i] = gen_calc(father[i], mother[i], alpha)
     return sister, brother
 
